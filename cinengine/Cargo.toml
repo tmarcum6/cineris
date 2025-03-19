@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 vulkano = "0.34.0"
+vulkano-win = "0.34.0"
 winit = "0.30.9"

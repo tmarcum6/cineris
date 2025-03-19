@@ -1,47 +1,31 @@
-// #[derive(Default)]
-// struct App {
-//     window: Option<Window>,
-// }
+use winit::{
+    dpi::LogicalSize,
+    event_loop::ActiveEventLoop,
+    window::{Window as WinitWindow, WindowAttributes, WindowId},
+};
 
-// impl ApplicationHandler for App {
-//     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-//         self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap());
-//     }
+pub struct Window {
+    pub winit_window: Option<WinitWindow>,
+    pub window_id: Option<WindowId>,
+}
 
-//     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
-//         match event {
-//             WindowEvent::CloseRequested => {
-//                 println!("The close button was pressed; stopping");
-//                 event_loop.exit();
-//             },
-//             WindowEvent::RedrawRequested => {
-//                 // Redraw the application.
-//                 //
-//                 // It's preferable for applications that do not render continuously to render in
-//                 // this event rather than in AboutToWait, since rendering in here allows
-//                 // the program to gracefully handle redraws requested by the OS.
+impl Window {
+    pub fn new() -> Self {
+        Self {
+            winit_window: None,
+            window_id: None,
+        }
+    }
 
-//                 // Draw.
+    pub fn default_attributes() -> WindowAttributes {
+        WindowAttributes::default()
+            .with_title("Cineris")
+            .with_inner_size(LogicalSize::new(800.0, 600.0))
+    }
 
-//                 // Queue a RedrawRequested event.
-//                 //
-//                 // You only need to call this if you've determined that you need to redraw in
-//                 // applications which do not always need to. Applications that redraw continuously
-//                 // can render here instead.
-//                 self.window.as_ref().unwrap().request_redraw();
-//             }
-//             _ => (),
-//         }
-//     }
-// }
-
-// fn main() {
-//     let event_loop = EventLoop::new().unwrap();
-
-//     event_loop.set_control_flow(ControlFlow::Poll);
-
-//     event_loop.set_control_flow(ControlFlow::Wait);
-
-//     let mut app = App::default();
-//     event_loop.run_app(&mut app);
-// }
+    pub fn create(&mut self, event_loop: &ActiveEventLoop) {
+        let window = event_loop.create_window(Self::default_attributes()).unwrap();
+        self.window_id = Some(window.id());
+        self.winit_window = Some(window);
+    }
+}

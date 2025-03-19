@@ -1,3 +1,6 @@
+use cinengine::app::App;
+
 fn main() {
-    println!("Hello, world!");
+    let a = App::new();
+    a.run();
 }
